@@ -10,27 +10,47 @@ const directions = {
   s: 'south',
   a: 'west',
 };
-const snake = {
-  bearing: 'east',
-  x: 9,
-  y: 9,
-  history: [],
-};
+class Snake {
+  constructor() {
+    this.bearing = 'east';
+    this.spine = [{ x: 7, y: 9 },
+                  { x: 8, y: 9 },
+                  { x: 9, y: 9 }];
+  }
+  head() {
+    return this.spine[this.spine.length - 1];
+  }
+  move(x, y) {
+    return this.spine.push({ x, y }) && this.spine.shift();
+  }
+}
+const snake = new Snake();
+const interval = setInterval(moveSnake, 750);
 
 document.onkeydown = (e) => {
   snake.bearing = directions[e.key];
 };
 
-function moveSnake() {
-  if (snake.bearing === 'north') snake.y -= 1;
-  if (snake.bearing === 'east') snake.x += 1;
-  if (snake.bearing === 'south') snake.y += 1;
-  if (snake.bearing === 'west') snake.x -= 1;
-  if (snake.x < 20 && snake.y < 20) {
-    board[snake.y][snake.x].classList = 'snake';
-  } else {
-    console.log('dead');
+function paintSnake(old) {
+  for (const [idx, vert] of snake.spine.entries()) {
+    const { x, y } = vert;
+    board[y][x].classList = 'snake';
   }
+  board[old.y][old.x].classList = '';
 }
 
-setInterval(moveSnake, 1000);
+function moveSnake() {
+  let { x, y } = snake.head();
+  console.log(x, y);
+  if (snake.bearing === 'north') y--;
+  if (snake.bearing === 'east') ++x;
+  if (snake.bearing === 'south') y++;
+  if (snake.bearing === 'west') x--;
+  const old = snake.move(x, y);
+
+  if (x > 19 || y > 19 || x < 0 || y < 0) {
+    clearInterval(interval);
+  } else {
+    paintSnake(old);
+  }
+}
