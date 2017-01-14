@@ -10,6 +10,16 @@ const directions = {
   s: 'south',
   a: 'west',
 };
+const momentum = {
+  ArrowUp: 'south',
+  ArrowRight: 'west',
+  ArrowDown: 'north',
+  ArrowLeft: 'east',
+  w: 'south',
+  d: 'west',
+  s: 'north',
+  a: 'east',
+};
 class Snake {
   constructor() {
     this.bearing = 'east';
@@ -23,12 +33,21 @@ class Snake {
   move(x, y) {
     return this.spine.push({ x, y }) && this.spine.shift();
   }
+  grow() {
+    const {x, y} = this.spine[0];
+    this.spine.unshift({x, y});
+  }
 }
 const snake = new Snake();
+let allowMove = true;
 const interval = setInterval(moveSnake, 750);
 
 document.onkeydown = (e) => {
-  snake.bearing = directions[e.key];
+  const turn = e.key;
+  if (snake.bearing !== momentum[turn] && allowMove) {
+    snake.bearing = directions[e.key];
+    allowMove = false;
+  }
 };
 
 function paintSnake(old) {
@@ -40,8 +59,8 @@ function paintSnake(old) {
 }
 
 function moveSnake() {
+  allowMove = true;
   let { x, y } = snake.head();
-  console.log(x, y);
   if (snake.bearing === 'north') y--;
   if (snake.bearing === 'east') ++x;
   if (snake.bearing === 'south') y++;
