@@ -23,4 +23,5 @@ h1 {
 }
 .food {
 	background-color: red;
+	border-radius: 50%;
 }
