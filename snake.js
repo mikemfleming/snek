@@ -22,11 +22,15 @@ document.onkeydown = (e) => {
 };
 
 function moveSnake() {
-  if (snake.bearing === 'north') snake.y += 1;
+  if (snake.bearing === 'north') snake.y -= 1;
   if (snake.bearing === 'east') snake.x += 1;
-  if (snake.bearing === 'south') snake.y -= 1;
+  if (snake.bearing === 'south') snake.y += 1;
   if (snake.bearing === 'west') snake.x -= 1;
-  board[snake.y][snake.x].classList = 'snake';
+  if (snake.x < 20 && snake.y < 20) {
+    board[snake.y][snake.x].classList = 'snake';
+  } else {
+    console.log('dead');
+  }
 }
 
 setInterval(moveSnake, 1000);
