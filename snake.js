@@ -26,6 +26,7 @@ class Snake {
     this.spine = [{ x: 7, y: 9 },
                   { x: 8, y: 9 },
                   { x: 9, y: 9 }];
+    this.food = this.genFood();
   }
   head() {
     return this.spine[this.spine.length - 1];
@@ -34,13 +35,25 @@ class Snake {
     return this.spine.push({ x, y }) && this.spine.shift();
   }
   grow() {
-    const {x, y} = this.spine[0];
-    this.spine.unshift({x, y});
+    const { x, y } = this.spine[0];
+    this.spine.unshift({ x, y });
+  }
+  eat(food) {
+    this.grow();
+    board[food.y][food.x].classList = 'snake';
+    this.genFood();
+  }
+  genFood() {
+    const x = Math.floor(Math.random() * 19);
+    const y = Math.floor(Math.random() * 19);
+    board[y][x].classList = 'food';
+    this.food = { x, y };
+    return this.food;
   }
 }
 const snake = new Snake();
 let allowMove = true;
-const interval = setInterval(moveSnake, 750);
+const interval = setInterval(moveSnake, 250);
 
 document.onkeydown = (e) => {
   const turn = e.key;
@@ -57,10 +70,12 @@ function paintSnake(old) {
   }
   board[old.y][old.x].classList = '';
 }
-
 function moveSnake() {
   allowMove = true;
   let { x, y } = snake.head();
+
+  if (x === snake.food.x && y === snake.food.y) snake.eat({ x, y });
+
   if (snake.bearing === 'north') y--;
   if (snake.bearing === 'east') ++x;
   if (snake.bearing === 'south') y++;
