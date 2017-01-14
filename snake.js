@@ -1,5 +1,6 @@
 const board = Array.from(document.getElementById('board').children)
   .map(c => Array.from(c.children));
+
 const directions = {
   ArrowUp: 'north',
   ArrowRight: 'east',
@@ -10,6 +11,7 @@ const directions = {
   s: 'south',
   a: 'west',
 };
+
 const momentum = {
   ArrowUp: 'south',
   ArrowRight: 'west',
@@ -20,6 +22,7 @@ const momentum = {
   s: 'north',
   a: 'east',
 };
+
 class Snake {
   constructor() {
     this.bearing = 'east';
@@ -51,6 +54,7 @@ class Snake {
     return this.food;
   }
 }
+
 const snake = new Snake();
 let allowMove = true;
 const interval = setInterval(moveSnake, 250);
@@ -70,18 +74,16 @@ function paintSnake(old) {
   }
   board[old.y][old.x].classList = '';
 }
+
 function moveSnake() {
   allowMove = true;
   let { x, y } = snake.head();
-
   if (x === snake.food.x && y === snake.food.y) snake.eat({ x, y });
-
   if (snake.bearing === 'north') y--;
   if (snake.bearing === 'east') ++x;
   if (snake.bearing === 'south') y++;
   if (snake.bearing === 'west') x--;
   const old = snake.move(x, y);
-
   if (x > 19 || y > 19 || x < 0 || y < 0) {
     clearInterval(interval);
   } else {
