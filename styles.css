@@ -1,6 +1,9 @@
 h1 {
 	text-align: center;
 }
+#score {
+	text-align: center;
+}
 #board {
 	margin: 0 auto;
 	width: 40vw;
