@@ -6,7 +6,8 @@ class World {
   genFood() {
     const x = Math.floor(Math.random() * 19);
     const y = Math.floor(Math.random() * 19);
-    const collision = snake.spine.find(v => v.x === x && v.y ===y);
+    const collision = snake.spine.find(v => v.x === x && v.y ===y) !== undefined;
+    console.log(collision);
     board[y][x].classList = 'food';
     this.food = { x, y };
     if (collision) {
@@ -50,5 +51,5 @@ class World {
   }
 }
 
-const world = new World();
-const interval = setInterval(world.moveSnake, 250);
+let world = new World();
+let interval = setInterval(world.moveSnake, 250);

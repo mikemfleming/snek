@@ -17,4 +17,4 @@ class Snake {
   }
 }
 
-const snake = new Snake();
+let snake = new Snake();

@@ -1,6 +1,8 @@
 const board = Array.from(document.getElementById('board').children)
   .map(c => Array.from(c.children));
 const scoreDiv = document.getElementById('score');
+const restartButton = document.getElementById('restart');
+restartButton.addEventListener('click', e => restart());
 let allowMove = true;
 let score = 0;
 const directions = {
@@ -26,8 +28,26 @@ const momentum = {
 
 document.onkeydown = (e) => {
   const turn = e.key;
-  if (snake.bearing !== momentum[turn] && allowMove) {
-    snake.bearing = directions[e.key];
-    allowMove = false;
+  if (directions[turn]) {
+    e.preventDefault();
+    if (snake.bearing !== momentum[turn] && allowMove) {
+      snake.bearing = directions[e.key];
+      allowMove = false;
+    }
   }
 };
+
+function clearBoard() {
+  board.forEach(row => {
+    row.forEach(cell => {
+      cell.classList = '';
+    });
+  });
+}
+
+function restart() {
+  clearBoard();
+  snake = new Snake();
+  world = new World();
+  interval = setInterval(world.moveSnake, 250);
+}

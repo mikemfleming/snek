@@ -26,5 +26,12 @@ h1 {
 }
 .food {
 	background-color: red;
-	border-radius: 50%;
+}
+#ui {
+	padding: 10px;
+	margin: 0 auto;
+	text-align: center;
+}
+#restart {
+
 }
