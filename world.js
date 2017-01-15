@@ -6,9 +6,14 @@ class World {
   genFood() {
     const x = Math.floor(Math.random() * 19);
     const y = Math.floor(Math.random() * 19);
+    const collision = snake.spine.find(v => v.x === x && v.y ===y);
     board[y][x].classList = 'food';
     this.food = { x, y };
-    return this.food;
+    if (collision) {
+      this.genFood()
+    } else {
+      return this.food;
+    }
   }
   feed(food) {
     snake.grow();
