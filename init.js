@@ -1,3 +1,4 @@
+let food = new Food();
 let control = new Control();
 let snake = new Snake();
 let state = new State();

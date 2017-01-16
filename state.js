@@ -9,12 +9,11 @@ class State {
     this.interval = setInterval(control.moveSnake, 250);
   }
   genFood() {
-    const x = Math.floor(Math.random() * 19);
-    const y = Math.floor(Math.random() * 19);
+    const { x, y, type } = food.genFood();
     if (this.detectCollision({ x, y })) {
       this.genFood();
     } else {
-      this.board[y][x].classList = 'food';
+      this.board[y][x].classList = type;
       this.food = { x, y };
       return this.food;
     }
