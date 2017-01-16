@@ -16,15 +16,19 @@ class Control {
   }
   moveSnake() { // needs to be functional-ized
     state.allowMove = true; // could use get/set for better IOC
+
     let { x, y } = snake.head();
+
     if (state.detectCollision({ x, y })) clearInterval(state.interval); // needs ask permission from state
     if (x === state.food.x && y === state.food.y) state.feed({ x, y });
     if (snake.bearing === 'north') y--;
     if (snake.bearing === 'east') ++x;
     if (snake.bearing === 'south') y++;
     if (snake.bearing === 'west') x--;
+
     const old = snake.move(x, y);
-    if (x > 19 || y > 19 || x < 0 || y < 0) {
+    
+    if (state.hitWall({ x, y })) {
       clearInterval(state.interval); // could use get/set for better IOC
     } else {
       state.paintSnake(old);

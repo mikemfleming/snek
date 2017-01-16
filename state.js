@@ -39,4 +39,7 @@ class State {
       .find(v => v.x === tile.x && v.y === tile.y)
       !== undefined;
   }
+  hitWall(tile) {
+    return tile.x < 0 || tile.x > 19 || tile.y < 0 || tile.y > 19;
+  }
 }
