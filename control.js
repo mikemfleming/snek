@@ -1,39 +1,18 @@
 class Control {
   constructor() {
     this.restartButton = document.getElementById('restart');
-    this.directions = {
-      ArrowUp: 'north',
-      ArrowRight: 'east',
-      ArrowDown: 'south',
-      ArrowLeft: 'west',
-      w: 'north',
-      d: 'east',
-      s: 'south',
-      a: 'west',
+    this.directions = { 
+      ArrowUp: 'north', ArrowRight: 'east',
+      ArrowDown: 'south', ArrowLeft: 'west',
+      w: 'north', d: 'east',
+      s: 'south', a: 'west',
     };
     this.momentum = {
-      ArrowUp: 'south',
-      ArrowRight: 'west',
-      ArrowDown: 'north',
-      ArrowLeft: 'east',
-      w: 'south',
-      d: 'west',
-      s: 'north',
-      a: 'east',
+      ArrowUp: 'south', ArrowRight: 'west',
+      ArrowDown: 'north', ArrowLeft: 'east',
+      w: 'south', d: 'west',
+      s: 'north', a: 'east',
     };
-    // could this v go into an init file ??
-    this.restartButton.addEventListener('click', e => this.restart());
-    document.onkeydown = (e) => {
-      const turn = e.key;
-      if (this.directions[turn]) {
-        e.preventDefault();
-        if (snake.bearing !== this.momentum[turn] && state.allowMove) {
-          snake.bearing = this.directions[e.key];
-          state.allowMove = false; // IOC !!!
-        }
-      }
-    };
-    //
   }
   moveSnake() { // needs to be functional-ized
     state.allowMove = true; // could use get/set for better IOC
@@ -69,5 +48,3 @@ class Control {
     state.scoreDiv.textContent = 0;
   }
 }
-
-let control = new Control();

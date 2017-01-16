@@ -35,5 +35,3 @@ class State {
     this.board[old.y][old.x].classList = '';
   }
 }
-
-let state = new State();

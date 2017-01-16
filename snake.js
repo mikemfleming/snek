@@ -16,5 +16,3 @@ class Snake {
     this.spine.unshift({ x, y });
   }
 }
-
-let snake = new Snake();
