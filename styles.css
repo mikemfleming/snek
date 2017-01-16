@@ -26,6 +26,7 @@ h1 {
 }
 .food {
 	background-color: red;
+	border-radius: 25%;
 }
 #ui {
 	padding: 10px;

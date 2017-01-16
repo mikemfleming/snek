@@ -63,6 +63,7 @@ class Control {
   }
   restart() { // make an init file ??
     this.clearBoard();
+    clearInterval(state.interval);
     snake = new Snake();
     state = new State();
     state.scoreDiv.textContent = 0;
