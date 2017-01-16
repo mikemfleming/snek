@@ -17,10 +17,7 @@ class Control {
   moveSnake() { // needs to be functional-ized
     state.allowMove = true; // could use get/set for better IOC
     let { x, y } = snake.head();
-    const collision = snake.spine // collision detection could be its own function
-      .slice(0, snake.spine.length - 1)
-      .find(v => v.x === x && v.y === y);
-    if (collision) clearInterval(interval); // needs to talk to state
+    if (state.detectCollision({ x, y })) clearInterval(state.interval); // needs ask permission from state
     if (x === state.food.x && y === state.food.y) state.feed({ x, y });
     if (snake.bearing === 'north') y--;
     if (snake.bearing === 'east') ++x;

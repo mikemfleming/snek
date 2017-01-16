@@ -11,12 +11,11 @@ class State {
   genFood() {
     const x = Math.floor(Math.random() * 19);
     const y = Math.floor(Math.random() * 19);
-    const collision = snake.spine.find(v => v.x === x && v.y ===y) !== undefined;
-    this.board[y][x].classList = 'food';
-    this.food = { x, y };
-    if (collision) { // collision could be its own function... always checking
-      this.genFood(); // if an { x, y } is in snake.spine
+    if (this.detectCollision({ x, y })) {
+      this.genFood();
     } else {
+      this.board[y][x].classList = 'food';
+      this.food = { x, y };
       return this.food;
     }
   }
@@ -33,5 +32,11 @@ class State {
       this.board[y][x].classList = 'snake';
     }
     this.board[old.y][old.x].classList = '';
+  }
+  detectCollision(tile) {
+    return snake.spine
+      .slice(0, snake.spine.length - 1)
+      .find(v => v.x === tile.x && v.y === tile.y)
+      !== undefined;
   }
 }
