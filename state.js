@@ -14,8 +14,8 @@ class State {
     const collision = snake.spine.find(v => v.x === x && v.y ===y) !== undefined;
     this.board[y][x].classList = 'food';
     this.food = { x, y };
-    if (collision) {
-      this.genFood();
+    if (collision) { // collision could be its own function... always checking
+      this.genFood(); // if an { x, y } is in snake.spine
     } else {
       return this.food;
     }
@@ -24,7 +24,7 @@ class State {
     snake.grow();
     this.board[food.y][food.x].classList = 'snake';
     this.genFood();
-    this.score += 10;
+    this.score += 10; // score keeping could be its own function
     this.scoreDiv.textContent = this.score;
   }
   paintSnake(old) {

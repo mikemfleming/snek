@@ -21,6 +21,7 @@ class Control {
       s: 'north',
       a: 'east',
     };
+    // could this v go into an init file ??
     this.restartButton.addEventListener('click', e => this.restart());
     document.onkeydown = (e) => {
       const turn = e.key;
@@ -32,11 +33,12 @@ class Control {
         }
       }
     };
+    //
   }
-  moveSnake() {
-    state.allowMove = true; // IOC !!
+  moveSnake() { // needs to be functional-ized
+    state.allowMove = true; // could use get/set for better IOC
     let { x, y } = snake.head();
-    const collision = snake.spine // collision bug ??
+    const collision = snake.spine // collision detection could be its own function
       .slice(0, snake.spine.length - 1)
       .find(v => v.x === x && v.y === y);
     if (collision) clearInterval(interval); // needs to talk to state
@@ -47,20 +49,19 @@ class Control {
     if (snake.bearing === 'west') x--;
     const old = snake.move(x, y);
     if (x > 19 || y > 19 || x < 0 || y < 0) {
-      console.log('dead')
-      clearInterval(state.interval); // IOC !!
+      clearInterval(state.interval); // could use get/set for better IOC
     } else {
       state.paintSnake(old);
     }
   }
   clearBoard() {
-    state.board.forEach(row => {
-      row.forEach(cell => {
+    state.board.forEach((row) => {
+      row.forEach((cell) => {
         cell.classList = '';
       });
     });
   }
-  restart() {
+  restart() { // make an init file ??
     this.clearBoard();
     snake = new Snake();
     state = new State();
