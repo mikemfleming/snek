@@ -24,12 +24,26 @@ h1 {
 .snake {
 	background-color: black;
 }
-.food {
-	background-color: red;
-	border-radius: 25%;
-}
 #ui {
 	padding: 10px;
 	margin: 0 auto;
 	text-align: center;
+}
+.normie .quake .nega .turbo .bonus {
+	border-radius: 25%;
+}
+.normie {
+	background-color: red;
+}
+.quake {
+	background-color: orange;
+}
+.nega {
+	background-color: green;
+}
+.turbo {
+	background-color: blue;
+}
+.bonus {
+	background-color: yellow;
 }
