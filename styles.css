@@ -24,6 +24,9 @@ h1 {
 .snake {
 	background-color: black;
 }
+.tile {
+	background-color: white;
+}
 #ui {
 	padding: 10px;
 	margin: 0 auto;
@@ -40,6 +43,15 @@ h1 {
 }
 .nega {
 	background-color: green;
+}
+.negaStyle {
+	background-color: red;
+	animation: trip 1s infinite;
+}
+@keyframes trip {
+	0% { background-color: red;  }
+	50% { background-color: blue; }
+	100% { background-color: green; }
 }
 .turbo {
 	background-color: blue;

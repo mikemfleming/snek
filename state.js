@@ -4,13 +4,32 @@ class State {
     this.score = 0;
     this.board = Array.from(document.getElementById('board').children)
       .map(c => Array.from(c.children));
+    this.clearBoard();
     this.scoreDiv = document.getElementById('score');
     this.scoreDiv.textContent = 0;
     this.food = this.genFood();
-    this.interval = setInterval(this.moveSnake.bind(this), 250);
+    this.normStep = 250;
+    this.turboStep = 100;
+    this.snakeStyle = 'snake';
+    // this.interval = setInterval(this.moveSnake.bind(this), this.normStep);
+    this.interval = (period) => {
+      console.log(period)
+      setTimeout(this.moveSnake.bind(this), period);
+    }
+
   }
-  toggleAllowMove() {
-    this.allowMove = ! this.allowMove
+  applyFx(type) {
+    type = 'nega'
+    const fx = {
+      turbo: () => {
+        state.normStep = 100;
+        state.turboStep = 250;
+      },
+      nega: () => {
+        state.snakeStyle = 'negaStyle';
+      }
+    }
+    fx[type]();
   }
   moveSnake() {
     let { x, y } = snake.head();
@@ -38,17 +57,17 @@ class State {
       console.log('dead');
     } else {
       this.paintSnake(old);
+      this.interval(this.normStep);
     }
   }
   clearBoard() {
     this.board.forEach((row) => {
       row.forEach((cell) => {
-        cell.classList = '';
+        cell.classList = this.tileStyle;
       });
     });
   }
   restart() {
-    this.clearBoard();
     clearInterval(this.interval);
     snake = new Snake();
     state = new State();
@@ -68,6 +87,7 @@ class State {
   }
   feed(food) {
     snake.grow();
+    this.applyFx(food.type)
     this.board[food.y][food.x].classList = 'snake';
     this.genFood();
     this.updateScore();
@@ -75,9 +95,9 @@ class State {
   paintSnake(old) {
     for (const [_, vert] of snake.spine.entries()) {
       const { x, y } = vert;
-      this.board[y][x].classList = 'snake';
+      this.board[y][x].classList = this.snakeStyle;
     }
-    this.board[old.y][old.x].classList = '';
+    this.board[old.y][old.x].classList = 'tile';
   }
   detectCollision(tile) {
     return snake.spine
