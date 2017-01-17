@@ -59,3 +59,7 @@ h1 {
 .bonus {
 	background-color: yellow;
 }
+.bonus-points {
+	color: red;
+	font-weight: bold;
+}

@@ -9,13 +9,14 @@ class State {
     this.scoreDiv.textContent = 0;
     this.food = this.genFood();
     this.step = 250;
+    this.bonus = 1;
     this.snakeStyle = 'snake';
     this.interval = (period) => {
       setTimeout(this.moveSnake.bind(this), period);
     }
   }
   applyFx(type) {
-    console.log(type)
+    console.log(type);
     const fx = {
       turbo: () => {
         state.step = 100;
@@ -25,6 +26,10 @@ class State {
       },
       normie: () => {
         this.resetFx();
+      },
+      bonus: () => {
+        this.bonus = 3;
+        document.getElementById('score').classList = 'bonus-points';
       }
     }
     fx[type]();
@@ -32,6 +37,7 @@ class State {
   resetFx() {
     state.step = 250;
     state.snakeStyle = 'snake';
+    document.getElementById('score').classList = '';
   }
   moveSnake() {
     let { x, y } = snake.head();
@@ -78,19 +84,17 @@ class State {
     const foodTypes = ['nega', 'turbo', 'normie', 'bonus', 'quake'];
     const x = Math.floor(Math.random() * 19);
     const y = Math.floor(Math.random() * 19);
-    const type = foodTypes[Math.floor(Math.random() * 3)];
+    const type = foodTypes[Math.floor(Math.random() * 4)];
     if (this.detectCollision({ x, y })) {
       this.genFood();
     } else {
       this.board[y][x].classList = type;
       this.food = { x, y, type };
-      console.log(this.food)
       return this.food;
     }
   }
   feed(food) {
     snake.grow();
-    console.log(food)
     this.applyFx(food.type);
     this.board[food.y][food.x].classList = 'snake';
     this.genFood();
@@ -113,7 +117,7 @@ class State {
     return tile.x < 0 || tile.x > 19 || tile.y < 0 || tile.y > 19;
   }
   updateScore() {
-    this.score += 10;
+    this.score = this.score + (this.bonus * 10);
     this.scoreDiv.textContent = this.score;
   }
 }
