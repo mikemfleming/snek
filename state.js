@@ -8,28 +8,30 @@ class State {
     this.scoreDiv = document.getElementById('score');
     this.scoreDiv.textContent = 0;
     this.food = this.genFood();
-    this.normStep = 250;
-    this.turboStep = 100;
+    this.step = 250;
     this.snakeStyle = 'snake';
-    // this.interval = setInterval(this.moveSnake.bind(this), this.normStep);
     this.interval = (period) => {
-      console.log(period)
       setTimeout(this.moveSnake.bind(this), period);
     }
-
   }
   applyFx(type) {
-    type = 'nega'
+    console.log(type)
     const fx = {
       turbo: () => {
-        state.normStep = 100;
-        state.turboStep = 250;
+        state.step = 100;
       },
       nega: () => {
         state.snakeStyle = 'negaStyle';
+      },
+      normie: () => {
+        this.resetFx();
       }
     }
     fx[type]();
+  }
+  resetFx() {
+    state.step = 250;
+    state.snakeStyle = 'snake';
   }
   moveSnake() {
     let { x, y } = snake.head();
@@ -42,7 +44,7 @@ class State {
     }
 
     if (x === this.food.x && y === this.food.y) { // if head is on food
-      this.feed({ x, y });                          // then eat
+      this.feed(this.food);                          // then eat
     }
 
     if (snake.bearing === 'north') y--; // increment according to bearing
@@ -57,7 +59,7 @@ class State {
       console.log('dead');
     } else {
       this.paintSnake(old);
-      this.interval(this.normStep);
+      this.interval(this.step);
     }
   }
   clearBoard() {
@@ -73,21 +75,23 @@ class State {
     state = new State();
   }
   genFood() {
-    const foodTypes = ['nega', 'quake', 'turbo', 'normie', 'bonus'];
+    const foodTypes = ['nega', 'turbo', 'normie', 'bonus', 'quake'];
     const x = Math.floor(Math.random() * 19);
     const y = Math.floor(Math.random() * 19);
-    const type = foodTypes[Math.floor(Math.random() * foodTypes.length)];
+    const type = foodTypes[Math.floor(Math.random() * 3)];
     if (this.detectCollision({ x, y })) {
       this.genFood();
     } else {
       this.board[y][x].classList = type;
-      this.food = { x, y };
+      this.food = { x, y, type };
+      console.log(this.food)
       return this.food;
     }
   }
   feed(food) {
     snake.grow();
-    this.applyFx(food.type)
+    console.log(food)
+    this.applyFx(food.type);
     this.board[food.y][food.x].classList = 'snake';
     this.genFood();
     this.updateScore();

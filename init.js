@@ -1,6 +1,6 @@
-let control = new Control();
 let snake = new Snake();
 let state = new State();
+state.interval(250);
 
 document.getElementById('restart')
   .addEventListener('click', e => state.restart());
