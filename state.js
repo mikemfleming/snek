@@ -7,7 +7,7 @@ class State {
     this.clearBoard();
     this.scoreDiv = document.getElementById('score');
     this.scoreDiv.textContent = 0;
-    this.food = this.genFood();
+    this.food = food.genFood();
     this.time = 250;
     this.bonus = 1;
     this.snakeStyle = 'snake';
@@ -18,6 +18,7 @@ class State {
     this.dragon = false;
   }
   applyFx(type) {
+    console.log(type)
     const fx = {
       turbo: () => state.time = 100,
       nega: () => state.snakeStyle = 'negaStyle',
@@ -66,7 +67,7 @@ class State {
       fireball.move(); // dragon mode stuff
     }
     if (x === this.food.x && y === this.food.y) { // check if need to eat
-      this.feed(this.food);
+      this.feed();
     }
     if (this.hitWall({ x, y }) || this.detectCollision({ x, y })) {
       console.log('dead'); // hit wall or hit self, end
@@ -86,25 +87,14 @@ class State {
     snake = new Snake();
     state = new State();
   }
-  genFood() {
-    const foodTypes = ['nega', 'turbo', 'normie', 'bonus', 'dragon', 'quake'];
-    const x = Math.floor(Math.random() * 19);
-    const y = Math.floor(Math.random() * 19);
-    // const type = foodTypes[Math.floor(Math.random() * 5)];
-    const type = foodTypes[4];
-    if (this.detectCollision({ x, y })) {
-      this.genFood();
-    } else {
-      // this.board[y][x].classList = type;
-      this.food = { x, y, type };
-      return this.food;
+  feed() {
+    let newFood = food.genFood(); // gen new food
+    while (this.detectCollision(newFood)) {
+      newFood = food.genFood(); // call until no collision
     }
-  }
-  feed(food) {
-    snake.grow();
-    this.applyFx(food.type);
-    this.board[food.y][food.x].classList = 'snake';
-    this.genFood();
+    this.food = newFood; // commit it to state
+    snake.grow(); // add length to snake
+    this.applyFx(this.food.type); // activate fx
     this.updateScore();
   }
   detectCollision(tile) {
