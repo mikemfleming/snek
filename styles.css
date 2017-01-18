@@ -32,9 +32,6 @@ h1 {
 	margin: 0 auto;
 	text-align: center;
 }
-.normie .quake .nega .turbo .bonus {
-	border-radius: 25%;
-}
 .normie {
 	background-color: red;
 }
@@ -62,4 +59,10 @@ h1 {
 .bonus-points {
 	color: red;
 	font-weight: bold;
+}
+.dragon {
+	background-color: purple;
+}
+.fireball {
+	background-color: black;
 }

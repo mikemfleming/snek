@@ -11,45 +11,50 @@ class State {
     this.step = 250;
     this.bonus = 1;
     this.snakeStyle = 'snake';
-    this.interval = (period) => {
-      setTimeout(this.moveSnake.bind(this), period);
+    this.interval = (fn, period) => {
+      setTimeout(fn.bind(this), period);
     }
+    this.interval(this.moveSnake, this.step);
+    this.dragon = false;
+    this.fireball = null;
+  }
+  shootFireball() {
+    this.fireball = new Fireball(snake.head(), snake.bearing);
   }
   applyFx(type) {
-    console.log(type);
+    console.log(type)
     const fx = {
-      turbo: () => {
-        state.step = 100;
-      },
-      nega: () => {
-        state.snakeStyle = 'negaStyle';
-      },
-      normie: () => {
-        this.resetFx();
-      },
+      turbo: () => state.step = 100,
+      nega: () => state.snakeStyle = 'negaStyle',
+      normie: () => this.resetFx(),
       bonus: () => {
         this.bonus = 3;
         document.getElementById('score').classList = 'bonus-points';
-      }
+      },
+      dragon: () => this.dragon = true,
     }
     fx[type]();
   }
   resetFx() {
     state.step = 250;
     state.snakeStyle = 'snake';
+    state.bonus = 1;
     document.getElementById('score').classList = '';
+    this.dragon = false;
   }
   moveSnake() {
-    let { x, y } = snake.head();
-
-    this.allowMove = true;
-
-    if (state.detectCollision({ x, y })) { // snake bit itself
-      clearInterval(this.interval);
-      console.log('dead');
+    if (this.dragon && this.fireball) {
+      if (this.fireball.bearing === 'north') this.fireball.loc.y -= 3; // increment according to bearing
+      if (this.fireball.bearing === 'east') this.fireball.loc.x += 3;
+      if (this.fireball.bearing === 'south') this.fireball.loc.y += 3;
+      if (this.fireball.bearing === 'west') this.fireball.loc.x -= 3;
+      if (this.hitWall(this.fireball.loc)) this.fireball = null;
     }
 
-    if (x === this.food.x && y === this.food.y) { // if head is on food
+    let { x, y } = snake.head();
+    this.allowMove = true;
+
+    if (x === this.food.x && y === this.food.y) { // if head is on food // this sometimes bugs out
       this.feed(this.food);                          // then eat
     }
 
@@ -58,14 +63,13 @@ class State {
     if (snake.bearing === 'south') y++;
     if (snake.bearing === 'west') x--;
 
-    const old = snake.move(x, y); // takes vert to be removed
-    
-    if (this.hitWall({ x, y })) {
+    if (this.hitWall({ x, y }) || this.detectCollision({ x, y })) {
       clearInterval(this.interval);
       console.log('dead');
     } else {
+      const old = snake.move(x, y); // takes vert to be removed
       this.paintSnake(old);
-      this.interval(this.step);
+      this.interval(this.moveSnake, this.step);
     }
   }
   clearBoard() {
@@ -76,15 +80,14 @@ class State {
     });
   }
   restart() {
-    clearInterval(this.interval);
     snake = new Snake();
     state = new State();
   }
   genFood() {
-    const foodTypes = ['nega', 'turbo', 'normie', 'bonus', 'quake'];
+    const foodTypes = ['nega', 'turbo', 'normie', 'bonus', 'dragon', 'quake'];
     const x = Math.floor(Math.random() * 19);
     const y = Math.floor(Math.random() * 19);
-    const type = foodTypes[Math.floor(Math.random() * 4)];
+    const type = foodTypes[4]; // Math.floor(Math.random() * 5)
     if (this.detectCollision({ x, y })) {
       this.genFood();
     } else {
@@ -105,7 +108,8 @@ class State {
       const { x, y } = vert;
       this.board[y][x].classList = this.snakeStyle;
     }
-    this.board[old.y][old.x].classList = 'tile';
+    console.log(this.board, old)
+    this.board[old.y][old.x].classList = '';
   }
   detectCollision(tile) {
     return snake.spine
