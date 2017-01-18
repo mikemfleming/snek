@@ -1,4 +1,5 @@
 let snake = new Snake();
+let fireball;
 let state = new State();
 
 document.getElementById('restart')
@@ -24,9 +25,9 @@ document.onkeydown = (e) => {
       state.allowMove = false; // IOC !!!
     }
   }
-  console.log(state.dragon)
   if (e.key === ' ' && state.dragon) {
+    console.log('fireball!')
     e.preventDefault();
-    state.shootFireball();
+    fireball = new Fireball(snake.head(), snake.bearing);
   }
 };

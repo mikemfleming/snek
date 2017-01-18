@@ -16,11 +16,11 @@ class State {
     }
     this.interval(this.moveSnake, this.step);
     this.dragon = false;
-    this.fireball = null;
+    // this.fireball = null;
   }
-  shootFireball() {
-    this.fireball = new Fireball(snake.head(), snake.bearing);
-  }
+  // shootFireball() {
+  //   this.fireball = new Fireball(snake.head(), snake.bearing);
+  // }
   applyFx(type) {
     console.log(type)
     const fx = {
@@ -43,21 +43,19 @@ class State {
     this.dragon = false;
   }
   moveSnake() {
-    if (this.dragon && this.fireball) {
-      if (this.fireball.bearing === 'north') this.fireball.loc.y -= 3; // increment according to bearing
-      if (this.fireball.bearing === 'east') this.fireball.loc.x += 3;
-      if (this.fireball.bearing === 'south') this.fireball.loc.y += 3;
-      if (this.fireball.bearing === 'west') this.fireball.loc.x -= 3;
-      if (this.hitWall(this.fireball.loc)) this.fireball = null;
+    if (this.dragon && fireball) { // if dragon mode is on and fireball isn't undefined
+      // pass in snake.head and snake.bearing to shoot fireball (new Fireball(snake.head, snake.bearing))
+      // only one fireball at a time
+      // if fireball is in board, fireball.move()
+      console.log(fireball.loc[0])
+      fireball.move();
+      if (this.hitWall(fireball.loc[0])) fireball = false;
     }
-
     let { x, y } = snake.head();
     this.allowMove = true;
-
     if (x === this.food.x && y === this.food.y) { // if head is on food // this sometimes bugs out
       this.feed(this.food);                          // then eat
     }
-
     if (this.hitWall({ x, y }) || this.detectCollision({ x, y })) {
       console.log('dead');
     } else { // hitwall and detectCollision bug on impact
@@ -81,7 +79,8 @@ class State {
     const foodTypes = ['nega', 'turbo', 'normie', 'bonus', 'dragon', 'quake'];
     const x = Math.floor(Math.random() * 19);
     const y = Math.floor(Math.random() * 19);
-    const type = foodTypes[Math.floor(Math.random() * 5)];
+    // const type = foodTypes[Math.floor(Math.random() * 5)];
+    const type = foodTypes[4];
     if (this.detectCollision({ x, y })) {
       this.genFood();
     } else {
