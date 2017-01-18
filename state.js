@@ -22,7 +22,6 @@ class State {
   //   this.fireball = new Fireball(snake.head(), snake.bearing);
   // }
   applyFx(type) {
-    console.log(type)
     const fx = {
       turbo: () => state.step = 100,
       nega: () => state.snakeStyle = 'negaStyle',
@@ -50,6 +49,7 @@ class State {
       const oldFireball = fireball.move();
       const currentFireball = fireball.currentLocation();
       this.board[oldFireball.y][oldFireball.x].classList = '';
+
       if (this.hitWall(fireball.loc[0])) {
         fireball = false;
       } else {
@@ -84,8 +84,8 @@ class State {
     const foodTypes = ['nega', 'turbo', 'normie', 'bonus', 'dragon', 'quake'];
     const x = Math.floor(Math.random() * 19);
     const y = Math.floor(Math.random() * 19);
-    // const type = foodTypes[Math.floor(Math.random() * 5)];
-    const type = foodTypes[4];
+    const type = foodTypes[Math.floor(Math.random() * 5)];
+    // const type = foodTypes[4];
     if (this.detectCollision({ x, y })) {
       this.genFood();
     } else {

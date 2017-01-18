@@ -25,8 +25,7 @@ document.onkeydown = (e) => {
       state.allowMove = false; // IOC !!!
     }
   }
-  if (e.key === ' ' && state.dragon) {
-    console.log('fireball!')
+  if (e.key === ' ' && state.dragon && !fireball) { // if spacebar, dragon mode, and no fireball
     e.preventDefault();
     fireball = new Fireball(snake.head(), snake.bearing);
   }
