@@ -4,6 +4,7 @@ class Snake {
     this.spine = [{ x: 7, y: 9 },
                   { x: 8, y: 9 },
                   { x: 9, y: 9 }];
+    this.trail = { x: 6, y: 9 };
   }
   head() {
     return this.spine[this.spine.length - 1];
@@ -16,7 +17,9 @@ class Snake {
     if (snake.bearing === 'south') y++;
     if (snake.bearing === 'west') x--;
     // adds new values to spine, returns oldest vertebrae for removal
-    return this.spine.push({ x, y }) && this.spine.shift();
+    // return this.spine.push({ x, y }) && this.spine.shift();
+    this.spine.push({ x, y });
+    this.trail = this.spine.shift();
   }
   grow() {
     const { x, y } = this.spine[0];

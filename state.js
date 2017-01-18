@@ -8,22 +8,19 @@ class State {
     this.scoreDiv = document.getElementById('score');
     this.scoreDiv.textContent = 0;
     this.food = this.genFood();
-    this.step = 250;
+    this.time = 250;
     this.bonus = 1;
     this.snakeStyle = 'snake';
     this.interval = (fn, period) => {
+      console.log('rollin')
       setTimeout(fn.bind(this), period);
     }
-    this.interval(this.moveSnake, this.step);
+    this.interval(this.step, this.time);
     this.dragon = false;
-    // this.fireball = null;
   }
-  // shootFireball() {
-  //   this.fireball = new Fireball(snake.head(), snake.bearing);
-  // }
   applyFx(type) {
     const fx = {
-      turbo: () => state.step = 100,
+      turbo: () => state.time = 100,
       nega: () => state.snakeStyle = 'negaStyle',
       normie: () => this.resetFx(),
       bonus: () => {
@@ -35,27 +32,59 @@ class State {
     fx[type]();
   }
   resetFx() {
-    state.step = 250;
+    state.time = 250;
     state.snakeStyle = 'snake';
     state.bonus = 1;
     document.getElementById('score').classList = '';
     this.dragon = false;
   }
-  moveSnake() {
-    if (this.dragon && fireball) { // if dragon mode is on and fireball isn't undefined
-      // pass in snake.head and snake.bearing to shoot fireball (new Fireball(snake.head, snake.bearing))
-      // only one fireball at a time
-      // if fireball is in board, fireball.move()
-      const oldFireball = fireball.move();
-      const currentFireball = fireball.currentLocation();
-      this.board[oldFireball.y][oldFireball.x].classList = '';
-
-      if (this.hitWall(fireball.loc[0])) {
-        fireball = false;
-      } else {
-        this.board[currentFireball.y][currentFireball.x].classList = 'fireball';      
-      }
+  // moveFireball() {    
+  //   // const oldFireball = fireball.move();
+  //   const currentFireball = fireball.currentLocation();
+  //   // this.board[oldFireball.y][oldFireball.x].classList = ''; // removes oldFireball style
+  //   if (this.hitWall(currentFireball)) { // deactivate when it hits a wall
+  //     fireball = false;
+  //   } else {
+  //     // this.board[currentFireball.y][currentFireball.x].classList = 'fireball';      
+  //   }
+  // }
+  paint() {
+    // paint snake
+    const oldSnake = snake.trail; // to erase
+    for (const [_, vert] of snake.spine.entries()) {
+      const { x, y } = vert;
+      this.board[y][x].classList = this.snakeStyle;
     }
+    this.board[oldSnake.y][oldSnake.x].classList = '';
+    // paint fireball
+    if (this.dragon && fireball) { // if dragon mode and active fireball
+      const oldBall = fireball.trail // to erase
+      const currBall = fireball.currentLocation();
+      this.board[oldBall.y][oldBall.x].classList = ''; // removes oldFireball style
+      if (this.hitWall(currBall)) {
+        fireball = undefined;
+        return
+      }
+      this.board[currBall.y][currBall.x].classList = 'fireball';
+    }
+    // paint food
+    this.board[this.food.y][this.food.x].classList = this.food.type;
+  }
+  step() {
+    // dragon mode stuff
+    if (this.dragon && fireball) { 
+      // this.moveFireball();
+      fireball.move();
+    }
+    snake.move()
+    // if fireball, move fireball
+    // move snake
+    // paint snake
+    // paint fireball
+    // paint food
+
+
+    // snake movement
     let { x, y } = snake.head();
     this.allowMove = true;
     if (x === this.food.x && y === this.food.y) { // if head is on food // this sometimes bugs out
@@ -63,11 +92,14 @@ class State {
     }
     if (this.hitWall({ x, y }) || this.detectCollision({ x, y })) {
       console.log('dead');
-    } else { // hitwall and detectCollision bug on impact
-      const old = snake.move();
-      this.paintSnake(old);
-      this.interval(this.moveSnake, this.step);
     }
+    // } else { // hitwall and detectCollision bug on impact
+    //   const old = snake.move();
+    //   this.paintSnake(old);
+    //   // this.interval(this.step, this.time);
+    // }
+    this.paint();
+    this.interval(this.step, this.time);
   }
   clearBoard() {
     this.board.forEach((row) => {
@@ -84,12 +116,12 @@ class State {
     const foodTypes = ['nega', 'turbo', 'normie', 'bonus', 'dragon', 'quake'];
     const x = Math.floor(Math.random() * 19);
     const y = Math.floor(Math.random() * 19);
-    const type = foodTypes[Math.floor(Math.random() * 5)];
-    // const type = foodTypes[4];
+    // const type = foodTypes[Math.floor(Math.random() * 5)];
+    const type = foodTypes[4];
     if (this.detectCollision({ x, y })) {
       this.genFood();
     } else {
-      this.board[y][x].classList = type;
+      // this.board[y][x].classList = type;
       this.food = { x, y, type };
       return this.food;
     }
