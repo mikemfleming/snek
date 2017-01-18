@@ -47,9 +47,14 @@ class State {
       // pass in snake.head and snake.bearing to shoot fireball (new Fireball(snake.head, snake.bearing))
       // only one fireball at a time
       // if fireball is in board, fireball.move()
-      console.log(fireball.loc[0])
-      fireball.move();
-      if (this.hitWall(fireball.loc[0])) fireball = false;
+      const oldFireball = fireball.move();
+      const currentFireball = fireball.currentLocation();
+      this.board[oldFireball.y][oldFireball.x].classList = '';
+      if (this.hitWall(fireball.loc[0])) {
+        fireball = false;
+      } else {
+        this.board[currentFireball.y][currentFireball.x].classList = 'fireball';      
+      }
     }
     let { x, y } = snake.head();
     this.allowMove = true;

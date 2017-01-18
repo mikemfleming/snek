@@ -1,8 +1,11 @@
 class Fireball {
   constructor(startingCoord, bearing) {
-    console.log('starting', startingCoord)
+    // console.log('starting', startingCoord)
     this.bearing = bearing;
     this.loc = [startingCoord]; // loc is a sack of length 1 (one fireball for now)
+  }
+  currentLocation() {
+    return this.loc[0];
   }
   move() {
     // moves according to bearing
