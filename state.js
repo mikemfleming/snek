@@ -58,16 +58,10 @@ class State {
       this.feed(this.food);                          // then eat
     }
 
-    if (snake.bearing === 'north') y--; // increment according to bearing
-    if (snake.bearing === 'east') ++x;
-    if (snake.bearing === 'south') y++;
-    if (snake.bearing === 'west') x--;
-
     if (this.hitWall({ x, y }) || this.detectCollision({ x, y })) {
-      clearInterval(this.interval);
       console.log('dead');
-    } else {
-      const old = snake.move(x, y); // takes vert to be removed
+    } else { // hitwall and detectCollision bug on impact
+      const old = snake.move();
       this.paintSnake(old);
       this.interval(this.moveSnake, this.step);
     }
@@ -87,7 +81,7 @@ class State {
     const foodTypes = ['nega', 'turbo', 'normie', 'bonus', 'dragon', 'quake'];
     const x = Math.floor(Math.random() * 19);
     const y = Math.floor(Math.random() * 19);
-    const type = foodTypes[4]; // Math.floor(Math.random() * 5)
+    const type = foodTypes[Math.floor(Math.random() * 5)];
     if (this.detectCollision({ x, y })) {
       this.genFood();
     } else {
@@ -108,7 +102,6 @@ class State {
       const { x, y } = vert;
       this.board[y][x].classList = this.snakeStyle;
     }
-    console.log(this.board, old)
     this.board[old.y][old.x].classList = '';
   }
   detectCollision(tile) {
