@@ -1,5 +1,6 @@
 class State {
   constructor() {
+    document.getElementById('restart').style.visibility = 'hidden';
     this.active = true;
     this.allowMove = true;
     this.score = 0;
@@ -58,6 +59,7 @@ class State {
     }
     if (this.hitWall({ x, y }) || this.detectCollision({ x, y })) {
       this.active = false;
+      document.getElementById('restart').style.visibility = 'visible';
       console.log('dead')
       return; // end if snake hit wall or bit itself
     }
