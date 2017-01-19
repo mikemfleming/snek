@@ -1,11 +1,11 @@
 class Food {
   constructor() {
-    this.types = ['nega', 'turbo', 'normie', 'bonus', 'quake', 'dragon'];
+    this.types = ['nega', 'turbo', 'normie', 'bonus', 'quake'];
   }
   genFood() {
     const x = Math.floor(Math.random() * 19);
     const y = Math.floor(Math.random() * 19);
-    const type = this.types[Math.floor(Math.random() * 4)];
+    const type = this.types[Math.floor(Math.random() * (this.types.length))];
     return { x, y, type };
   }
 }
