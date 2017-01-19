@@ -4,7 +4,6 @@ class State {
     this.score = 0;
     this.board = Array.from(document.getElementById('board').children)
       .map(c => Array.from(c.children));
-    this.clearBoard();
     this.scoreDiv = document.getElementById('score');
     this.scoreDiv.textContent = 0;
     this.food = food.genFood();
@@ -12,13 +11,14 @@ class State {
     this.bonus = 1;
     this.snakeStyle = 'snake';
     this.interval = (fn, period) => {
-      setTimeout(fn.bind(this), period);
-    }
+      return setTimeout(fn.bind(this), period);
+    };
+    // this.dragon = false;
+
+    this.clearBoard();
     this.interval(this.step, this.time);
-    this.dragon = false;
   }
   applyFx(type) {
-    console.log(type)
     const fx = {
       turbo: () => state.time = 100,
       nega: () => state.snakeStyle = 'negaStyle',
@@ -27,8 +27,8 @@ class State {
         this.bonus = 3;
         document.getElementById('score').classList = 'bonus-points';
       },
-      dragon: () => this.dragon = true,
-    }
+      // dragon: () => this.dragon = true,
+    };
     fx[type]();
   }
   resetFx() {
@@ -36,7 +36,7 @@ class State {
     state.snakeStyle = 'snake';
     state.bonus = 1;
     document.getElementById('score').classList = '';
-    this.dragon = false;
+    // this.dragon = false;
   }
   paint() {
     // paint snake
@@ -47,30 +47,35 @@ class State {
     }
     this.board[oldSnake.y][oldSnake.x].classList = '';
     // paint fireball
-    if (this.dragon && fireball) { // if dragon mode and active fireball
-      const oldBall = fireball.trail // to erase
-      const currBall = fireball.currentLocation();
-      this.board[oldBall.y][oldBall.x].classList = ''; // removes oldFireball style
-      if (this.hitWall(currBall)) {
-        fireball = undefined;
-        return
-      }
-      this.board[currBall.y][currBall.x].classList = 'fireball';
-    }
+    // if (this.dragon && fireball) { // if dragon mode and active fireball
+    //   const oldBall = fireball.trail; // to erase
+    //   const currBall = fireball.currentLocation();
+    //   this.board[oldBall.y][oldBall.x].classList = ''; // removes oldFireball style
+    //   if (this.hitWall(currBall)) {
+    //     fireball = undefined;
+    //     // return;
+    //   }
+    //   this.board[currBall.y][currBall.x].classList = 'fireball';
+    // }
     // paint food
     this.board[this.food.y][this.food.x].classList = this.food.type;
   }
   step() {
-    let { x, y } = snake.head();
     snake.move();
-    if (this.dragon && fireball) { 
-      fireball.move(); // dragon mode stuff
-    }
+    let { x, y } = snake.head();
+    // if (this.dragon && fireball) {
+    //   fireball.move(); // dragon mode stuff
+    // }
     if (x === this.food.x && y === this.food.y) { // check if need to eat
       this.feed();
     }
+    // if (this.hitWall({ x, y }) || this.detectCollision({ x, y })) {
+    //   console.log('dead'); // hit wall or hit self, end
+    //   return;
+    // }
     if (this.hitWall({ x, y }) || this.detectCollision({ x, y })) {
-      console.log('dead'); // hit wall or hit self, end
+      console.log('dead')
+      return; // end if snake hit wall or bit itself
     }
     this.paint(); // paint all the movement we just did
     this.interval(this.step, this.time); // set another interval
@@ -79,22 +84,24 @@ class State {
   clearBoard() {
     this.board.forEach((row) => {
       row.forEach((cell) => {
-        cell.classList = this.tileStyle;
+        cell.classList = '';
       });
     });
   }
-  restart() {
+  restart() { // needs to check a "game on" property
     snake = new Snake();
+    food = new Food();
     state = new State();
+    this.resetFx();
   }
   feed() {
     let newFood = food.genFood(); // gen new food
     while (this.detectCollision(newFood)) {
       newFood = food.genFood(); // call until no collision
     }
+    this.applyFx(this.food.type); // activate fx
     this.food = newFood; // commit it to state
     snake.grow(); // add length to snake
-    this.applyFx(this.food.type); // activate fx
     this.updateScore();
   }
   detectCollision(tile) {
