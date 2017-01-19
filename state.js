@@ -5,22 +5,22 @@ class State {
     this.board = Array.from(document.getElementById('board').children)
       .map(c => Array.from(c.children));
     this.scoreDiv = document.getElementById('score');
-    this.scoreDiv.textContent = 0;
-    this.food = food.genFood();
-    this.time = 250;
-    this.bonus = 1;
-    this.snakeStyle = 'snake';
-    this.interval = (fn, period) => {
+    this.scoreDiv.textContent = 0; // reset score
+    this.food = food.genFood(); // make new food
+    this.time = 250; // can be changed by turbo food
+    this.bonus = 1; // also ^
+    this.snakeStyle = 'snake'; // can be changed be nega food
+    this.interval = (fn, period) => { 
       return setTimeout(fn.bind(this), period);
-    };
+    }; // interval can be used by any function or times
 
-    this.clearBoard();
-    this.interval(this.step, this.time);
+    this.clearBoard(); // clears last game
+    this.interval(this.step, this.time); // starts steppin
   }
   applyFx(type) {
     const fx = {
-      turbo: () => state.time = 100,
-      nega: () => state.snakeStyle = 'negaStyle',
+      turbo: () => this.time = 100,
+      nega: () => this.snakeStyle = 'negaStyle',
       normie: () => this.resetFx(),
       bonus: () => {
         this.bonus = 3;
@@ -30,9 +30,9 @@ class State {
     fx[type]();
   }
   resetFx() {
-    state.time = 250;
-    state.snakeStyle = 'snake';
-    state.bonus = 1;
+    this.time = 250;
+    this.snakeStyle = 'snake';
+    this.bonus = 1;
     document.getElementById('score').classList = '';
   }
   paint() {
@@ -70,7 +70,7 @@ class State {
   restart() { // needs to check a "game on" property
     snake = new Snake();
     food = new Food();
-    state = new State();
+    state = new this();
     this.resetFx();
   }
   feed() {
@@ -79,7 +79,7 @@ class State {
       newFood = food.genFood(); // call until no collision
     }
     this.applyFx(this.food.type); // activate fx
-    this.food = newFood; // commit it to state
+    this.food = newFood; // commit it to this
     snake.grow(); // add length to snake
     this.updateScore();
   }

@@ -1,5 +1,4 @@
 let snake = new Snake();
-// let fireball;
 let food = new Food();
 let state = new State();
 
