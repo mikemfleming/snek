@@ -2,7 +2,8 @@ class State {
   constructor() {
     this.allowMove = true;
     this.score = 0;
-    this.board = Array.from(document.getElementById('board').children)
+    this.boardDiv = document.getElementById('board');
+    this.board = Array.from(this.boardDiv.children)
       .map(c => Array.from(c.children));
     this.scoreDiv = document.getElementById('score');
     this.scoreDiv.textContent = 0; // reset score
@@ -12,7 +13,7 @@ class State {
     this.snakeStyle = 'snake'; // can be changed be nega food
     this.interval = (fn, period) => { 
       return setTimeout(fn.bind(this), period);
-    }; // interval can be used by any function or times
+    }; // interval can be used by any function o times
 
     this.clearBoard(); // clears last game
     this.interval(this.step, this.time); // starts steppin
@@ -24,8 +25,9 @@ class State {
       normie: () => this.resetFx(),
       bonus: () => {
         this.bonus = 3;
-        document.getElementById('score').classList = 'bonus-points';
+        this.scoreDiv.classList = 'bonus-points';
       },
+      quake: () => this.boardDiv.classList = 'earthquake',
     };
     fx[type]();
   }
@@ -33,7 +35,8 @@ class State {
     this.time = 250;
     this.snakeStyle = 'snake';
     this.bonus = 1;
-    document.getElementById('score').classList = '';
+    this.scoreDiv.classList = '';
+    this.boardDiv.classList = '';
   }
   paint() {
     // paint snake
@@ -70,7 +73,7 @@ class State {
   restart() { // needs to check a "game on" property
     snake = new Snake();
     food = new Food();
-    state = new this();
+    state = new State();
     this.resetFx();
   }
   feed() {
