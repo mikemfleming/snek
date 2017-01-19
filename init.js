@@ -31,10 +31,7 @@ document.onkeydown = (e) => {
   if (directions[e.key]) {
     if (snake.bearing !== momentum[e.key] && state.allowMove) {
       snake.bearing = directions[e.key];
-      state.allowMove = false; // IOC !!!
+      state.allowMove = false;
     }
   }
-  // if (e.key === ' ' && state.dragon && !fireball) { // if spacebar, dragon mode, and no fireball
-  //   fireball = new Fireball(snake.head(), snake.bearing);
-  // }
 };

@@ -13,7 +13,6 @@ class State {
     this.interval = (fn, period) => {
       return setTimeout(fn.bind(this), period);
     };
-    // this.dragon = false;
 
     this.clearBoard();
     this.interval(this.step, this.time);
@@ -27,7 +26,6 @@ class State {
         this.bonus = 3;
         document.getElementById('score').classList = 'bonus-points';
       },
-      // dragon: () => this.dragon = true,
     };
     fx[type]();
   }
@@ -36,7 +34,6 @@ class State {
     state.snakeStyle = 'snake';
     state.bonus = 1;
     document.getElementById('score').classList = '';
-    // this.dragon = false;
   }
   paint() {
     // paint snake
@@ -46,33 +43,15 @@ class State {
       this.board[y][x].classList = this.snakeStyle;
     }
     this.board[oldSnake.y][oldSnake.x].classList = '';
-    // paint fireball
-    // if (this.dragon && fireball) { // if dragon mode and active fireball
-    //   const oldBall = fireball.trail; // to erase
-    //   const currBall = fireball.currentLocation();
-    //   this.board[oldBall.y][oldBall.x].classList = ''; // removes oldFireball style
-    //   if (this.hitWall(currBall)) {
-    //     fireball = undefined;
-    //     // return;
-    //   }
-    //   this.board[currBall.y][currBall.x].classList = 'fireball';
-    // }
     // paint food
     this.board[this.food.y][this.food.x].classList = this.food.type;
   }
   step() {
     snake.move();
     let { x, y } = snake.head();
-    // if (this.dragon && fireball) {
-    //   fireball.move(); // dragon mode stuff
-    // }
     if (x === this.food.x && y === this.food.y) { // check if need to eat
       this.feed();
     }
-    // if (this.hitWall({ x, y }) || this.detectCollision({ x, y })) {
-    //   console.log('dead'); // hit wall or hit self, end
-    //   return;
-    // }
     if (this.hitWall({ x, y }) || this.detectCollision({ x, y })) {
       console.log('dead')
       return; // end if snake hit wall or bit itself

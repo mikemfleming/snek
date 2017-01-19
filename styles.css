@@ -60,12 +60,6 @@ h1 {
 	color: red;
 	font-weight: bold;
 }
-.dragon {
-	background-color: purple;
-}
-.fireball {
-	background-color: black;
-}
 .quake {
 	animation: quake 4s infinite;
 }
