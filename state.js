@@ -1,5 +1,6 @@
 class State {
   constructor() {
+    this.active = true;
     this.allowMove = true;
     this.score = 0;
     this.boardDiv = document.getElementById('board');
@@ -56,6 +57,7 @@ class State {
       this.feed();
     }
     if (this.hitWall({ x, y }) || this.detectCollision({ x, y })) {
+      this.active = false;
       console.log('dead')
       return; // end if snake hit wall or bit itself
     }
@@ -71,6 +73,7 @@ class State {
     });
   }
   restart() { // needs to check a "game on" property
+    if (this.active) return
     snake = new Snake();
     food = new Food();
     state = new State();
