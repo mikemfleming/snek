@@ -2,10 +2,11 @@ body {
 	font-family: 'Share Tech Mono';
 }
 #top {
-	width: 40vw;
+	max-width: 40vw;
 	border: 5px solid black;
 	margin: 1% auto;
 	padding: 7.5px 2.5px 2.5px 2.5px;
+	overflow: hidden;
 }
 #ui > input {
 	background-color: white;
@@ -26,7 +27,7 @@ body {
 }
 #board {
 	margin: 0 auto;
-	width: 40vw;
+	max-width: 40vw;
 	height: 40vw;
 	border: 5px solid black;
 }
@@ -51,7 +52,7 @@ body {
 	padding: 10px;
 	margin: 0 auto;
 	text-align: center;
-	width: 40vw;
+	max-width: 40vw;
 }
 .normie {
 	background-color: #FA7921;
