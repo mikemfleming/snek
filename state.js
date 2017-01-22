@@ -13,12 +13,14 @@ class State {
     this.time = 250; // can be changed by turbo food
     this.bonus = 1; // also ^
     this.snakeStyle = 'snake'; // can be changed be nega food
+    this.quakeTime = 250
     this.interval = (fn, period) => { 
       return setTimeout(fn.bind(this), period);
     }; // interval can be used by any function o times
 
     this.clearBoard(); // clears last game
     this.interval(this.step, this.time); // starts steppin
+    this.updateLeaderboard();
   }
   applyFx(type) {
     const fx = {
@@ -29,7 +31,11 @@ class State {
         this.bonus = 3;
         this.scoreDiv.classList = 'bonus-points';
       },
-      quake: () => this.boardDiv.classList = 'earthquake',
+      quake: () => {
+        this.boardDiv.classList = 'earthquake';
+        setTimeout(() => this.boardDiv.classList = '', this.quakeTime);
+        this.quakeTime += 500
+      },
     };
     fx[type]();
   }
@@ -60,6 +66,8 @@ class State {
     if (this.hitWall({ x, y }) || this.detectCollision({ x, y })) {
       this.active = false;
       document.getElementById('restart').style.visibility = 'visible';
+      this.submitScore();
+      this.updateLeaderboard();
       return; // end if snake hit wall or bit itself
     }
     this.paint(); // paint all the movement we just did
@@ -102,5 +110,31 @@ class State {
   updateScore() {
     this.score = this.score + (this.bonus * 10);
     this.scoreDiv.textContent = this.score;
+  }
+  submitScore() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", 'submit', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({
+        score: this.score,
+    }));
+  }
+  updateLeaderboard() {
+    if (!username) return
+    const leaderBoard = Array.from(document.getElementById('leaderboard').children).splice(1);
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", 'top', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.addEventListener('load', res => {
+      const topTen = JSON.parse(res.currentTarget.response);
+      leaderBoard.forEach((row, idx) => {
+        const player = topTen[idx].game.player;
+        const score = topTen[idx].game.score;
+        row.textContent = `#${idx + 1} - ${player} - ${score}pts`
+      })
+    })
+    xhr.send(JSON.stringify({
+        score: this.score,
+    }));
   }
 }
