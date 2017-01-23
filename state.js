@@ -49,7 +49,7 @@ class State {
   paint() {
     // paint snake
     const oldSnake = snake.trail; // to erase
-    for (const [_, vert] of snake.spine.entries()) {
+    for (let [_, vert] of snake.spine.entries()) {
       const { x, y } = vert;
       this.board[y][x].classList = this.snakeStyle;
     }
