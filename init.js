@@ -34,3 +34,13 @@ document.onkeydown = (e) => {
     }
   }
 };
+
+if (username) {
+  setTimeout(() => {
+      document.getElementById('leaderboard').style.transform = 'translateX(0)';
+  }, 100);
+  document.getElementById('user').textContent = username;
+  document.getElementById('auth').innerHTML = '<a href="/logout" class="btn btn-default"><span class="fa fa-user"></span>Logout</a>';
+}
+setTimeout(() => document.getElementById('social').style.top = '0.5em', 2000);
+

@@ -8,32 +8,30 @@ body {
 	padding: 7.5px 2.5px 2.5px 2.5px;
 	overflow: hidden;
 }
-#ui > input {
+#restart {
 	background-color: white;
 	font-family: 'Share Tech Mono';
 	font-size: 1em;
 	border: 3px solid black;
 	padding: 10px;
 	float: right;
+	cursor: pointer;
+}
+#restart:active {
+	background-color: black;
+	color: white;
+}
+#restart:focus {
+	outline: none;
 }
 #user {
 	float: left;
 }
-/*#ui >input:hover {
-	animation: grow .75s infinite;
-}
-@keyframes grow {
-	0% { font-size: 1em; }
-	25% { font-size: 1.1em; }
-	50% { font-size: 1.2em; }
-	75% { font-size: 1.1em; }
-}*/
 #panel {
 	margin: 0 auto;
 	display: flex;
 	flex-direction: row;
-/*	width: 100vw;
-*/}
+}
 #title {
 	display: inline;
 	font-size: 3em;
@@ -57,23 +55,27 @@ body {
 #auth > a {
 	padding-right: 2vw;
 }
-#leaderboard.out {
+#container {
 	position: absolute;
-	top: 10em;
+	top: 10vw;
 	right: 0;
-	width: 15vw;
-	text-align: center;
-	border: 1px solid black;
-	transform: translateX(20vw);
-	transition: transform 1s;
+	width: 25vw;
+	height: 100%;
+	overflow: hidden;
 }
-#leaderboard.in {
+#social {
 	position: absolute;
-	top: 10em;
-	right: 7.5vw;
-	width: 15vw;
+	top: -10em;
+	transition: top 1s;
+}
+#social > * {
+	display: inline-flex;
+}
+#leaderboard {
+	width: 75%;
 	text-align: center;
 	border: 1px solid black;
+	transform: translateX(50vw);
 	transition: transform 1s;
 }
 table {
@@ -84,15 +86,11 @@ table {
 .row {
 	padding: .5em;
 	border-top: 1px solid black;
-	border-bottom: 1px solid black;
-	transition: .3s height;
-/*	height: 1em;
-*/}
-/*.row:hover {
-	height:1.5em;
-	line-height: 1.5em;
-	font-weight: bolder;
-}*/
+}
+.row:hover {
+	background-color: black;
+	color: white;
+}
 #board > div {
 	padding: 0;
 	height: 5%;
