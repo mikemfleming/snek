@@ -112,15 +112,16 @@ class State {
     this.scoreDiv.textContent = this.score;
   }
   submitScore() {
+    const token = document.cookie.split('XSRF-TOKEN=')[1];
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", 'submit', true);
+    xhr.open("POST", `submit?_csrf=${token}`, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify({
         score: this.score,
     }));
   }
   updateLeaderboard() {
-    if (!username) return
+    if (!username) return;
     const leaderBoard = Array.from(document.getElementById('leaderboard').children).splice(1);
     var xhr = new XMLHttpRequest();
     xhr.open("GET", 'top', true);
