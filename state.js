@@ -112,7 +112,7 @@ class State {
     this.scoreDiv.textContent = this.score;
   }
   submitScore() {
-    const token = document.cookie.split('XSRF-TOKEN=')[1];
+    const token = document.getElementById('csrf').value;
     var xhr = new XMLHttpRequest();
     xhr.open("POST", `submit?_csrf=${token}`, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
