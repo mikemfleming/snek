@@ -1,7 +1,8 @@
-let snake = new Snake();
+let snake = new Snake();// initialize game as soon as page loads
 let food = new Food();
 let state = new State();
 
+// event listeners
 document.getElementById('restart')
   .addEventListener('click', e => state.restart());
 
@@ -35,6 +36,8 @@ document.onkeydown = (e) => {
   }
 };
 
+// display and style logic for user and guest mode
+
 if (username) {
   setTimeout(() => {
       document.getElementById('leaderboard').style.transform = 'translateX(0)';
@@ -43,4 +46,3 @@ if (username) {
   document.getElementById('auth').innerHTML = '<a href="/logout" class="btn btn-default"><span class="fa fa-user"></span>Logout</a>';
 }
 setTimeout(() => document.getElementById('social').style.top = '0.5em', 2000);
-
